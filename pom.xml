@@ -35,5 +35,7 @@
 		</license>
 	</licenses>
 
+	<modules>
+		<module>1-reactive</module>
+	</modules>
 </project>
-
