@@ -17,7 +17,9 @@
 package com.greglturnquist.hackingspringboot.reactive;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.geo.Point;
 
+import java.util.Date;
 import java.util.Objects;
 
 // tag::code[]
@@ -27,6 +29,12 @@ public class Item {
 	private String name;
 	private String description;
 	private double price;
+	private String distributorRegion;
+	private Date releaseDate;
+	private int availableUnits;
+	private Point location;
+	private boolean active;
+
 	// end::code[]
 
 	private Item() {}
@@ -67,6 +75,46 @@ public class Item {
 
 	public void setPrice(double price) {
 		this.price = price;
+	}
+
+	public String getDistributorRegion() {
+		return distributorRegion;
+	}
+
+	public void setDistributorRegion(String distributorRegion) {
+		this.distributorRegion = distributorRegion;
+	}
+
+	public Date getReleaseDate() {
+		return releaseDate;
+	}
+
+	public void setReleaseDate(Date releaseDate) {
+		this.releaseDate = releaseDate;
+	}
+
+	public int getAvailableUnits() {
+		return availableUnits;
+	}
+
+	public void setAvailableUnits(int availableUnits) {
+		this.availableUnits = availableUnits;
+	}
+
+	public Point getLocation() {
+		return location;
+	}
+
+	public void setLocation(Point location) {
+		this.location = location;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	@Override
