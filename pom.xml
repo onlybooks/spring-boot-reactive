@@ -40,5 +40,6 @@
 		<module>2-reactive</module>
 		<module>2b-reactive</module>
 		<module>3-reactive</module>
+		<module>4-reactive</module>
 	</modules>
 </project>
