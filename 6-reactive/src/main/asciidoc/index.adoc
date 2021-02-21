@@ -1,17 +1,21 @@
 = Hacking with Spring Boot API Portal
 
-When you stand up a web service, people will want to see how to use it. Thanks to Spring REST Docs, you can generate all the interactions needed via test cases that in turn generate readable documentation. A match made in heaven, or at least, in your IDE.
+웹 서비스를 출시하면 개발자들에게 사용법을 알려줘야 합니다.
 
-By running the following request:
+스프링 레스트 독 덕분에 테스트 케이스에서 서비스의 모든 상호 작용을 추출하고 읽기 좋은 문서를 자동으로 만들 수 있으며, +
+IDE를 통해 아주 쉽게 작업을 수행할 수 있습니다.
+
+
+다음 요청을 실행하면:
 
 include::{snippets}/findAll/curl-request.adoc[]
 
-...the `ApiItemController` will yield the following response:
+...`ApiItemController`는 다음과 같은 응답을 반환합니다.
 
 include::{snippets}/findAll/response-body.adoc[]
 
-Fan of HTTPie? You can issue the following command:
+HTTPie를 사용하시나요? 다음 명령을 실행해보세요.
 
 include::{snippets}/findAll/httpie-request.adoc[]
 
-...and get the same response. The choice is yours.
+...동일한 응답 본문이 반환됩니다. curl과 HTTPie 중 좋아하는 것을 사용하시면 됩니다.
