@@ -92,8 +92,8 @@ public class HypermediaItemControllerDocumentationTest {
 				.expectBody() //
 				.consumeWith(document("findOne-hypermedia", preprocessResponse(prettyPrint()), //
 						links( // <1>
-								linkWithRel("self").description("Canonical link to this `Item`"), // <2>
-								linkWithRel("item").description("Link back to the aggregate root")))); // <3>
+								linkWithRel("self").description("이 `Item`에 대한 공식 링크"), // <2>
+								linkWithRel("item").description("`Item` 목록 링크")))); // <3>
 	}
 	// end::test3[]
 
