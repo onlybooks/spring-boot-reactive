@@ -49,7 +49,7 @@ public class SpringAmqpItemController {
 	@PostMapping("/items") // <1>
 	Mono<ResponseEntity<?>> addNewItemUsingSpringAmqp(@RequestBody Mono<Item> item) { // <2>
 		return item //
-				.publishOn(Schedulers.boundedElastic())// <3>
+				.subscribeOn(Schedulers.boundedElastic())// <3>
 				.flatMap(content -> { //
 					return Mono //
 							.fromCallable(() -> { // <4>
