@@ -41,7 +41,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @ContextConfiguration // <4>
 public class RabbitTest {
 
-	@Container static RabbitMQContainer container = new RabbitMQContainer(); // <5>
+	@Container static RabbitMQContainer container = new RabbitMQContainer("rabbitmq:3.7.25-management-alpine"); // <5>
 
 	@Autowired WebTestClient webTestClient; // <6>
 
