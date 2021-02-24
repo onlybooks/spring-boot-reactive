@@ -46,5 +46,6 @@
 		<module>7-reactive</module>
 		<module>8-reactive-server</module>
 		<module>8-reactive-client</module>
+		<module>9-reactive-quick</module>
 	</modules>
 </project>
