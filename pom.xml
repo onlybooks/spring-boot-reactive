@@ -48,5 +48,6 @@
 		<module>8-reactive-client</module>
 		<module>9-reactive-quick</module>
 		<module>9-reactive-repository</module>
+		<module>9-reactive-custom-config</module>
 	</modules>
 </project>
