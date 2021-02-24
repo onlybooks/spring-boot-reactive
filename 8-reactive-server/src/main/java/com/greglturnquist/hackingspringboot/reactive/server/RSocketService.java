@@ -16,11 +16,7 @@
 
 package com.greglturnquist.hackingspringboot.reactive.server;
 
-import reactor.core.publisher.EmitterProcessor;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.FluxProcessor;
-import reactor.core.publisher.FluxSink;
-import reactor.core.publisher.Mono;
+import reactor.core.publisher.*;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
@@ -34,16 +30,20 @@ public class RSocketService {
 
 	private final ItemRepository repository;
 	// end::code[]
-	private final EmitterProcessor<Item> itemProcessor;
-	private final FluxSink<Item> itemSink;
+//	private final EmitterProcessor<Item> itemProcessor;
+
+//	private final FluxSink<Item> itemSink;
+	private final Sinks.Many<Item> itemsSink;
 
 	// tag::code2[]
 	public RSocketService(ItemRepository repository) {
 		this.repository = repository; // <2>
 		// end::code2[]
 		// tag::code3[]
-		this.itemProcessor = EmitterProcessor.create(); // <1>
-		this.itemSink = this.itemProcessor.sink(); // <2>
+//		this.itemProcessor = EmitterProcessor.create(); // <1>
+//		this.itemSink = this.itemProcessor.sink(); // <2>
+		this.itemsSink = Sinks.many().multicast().onBackpressureBuffer();
+
 	}
 	// end::code3[]
 
@@ -51,7 +51,8 @@ public class RSocketService {
 	@MessageMapping("newItems.request-response") // <1>
 	public Mono<Item> processNewItemsViaRSocketRequestResponse(Item item) { // <2>
 		return this.repository.save(item) // <3>
-				.doOnNext(savedItem -> this.itemSink.next(savedItem)); // <4>
+//				.doOnNext(savedItem -> this.itemSink.next(savedItem)); // <4>
+				.doOnNext(savedItem -> this.itemsSink.tryEmitNext(savedItem)); // <4>
 	}
 	// end::request-response[]
 
@@ -59,7 +60,7 @@ public class RSocketService {
 	@MessageMapping("newItems.fire-and-forget")
 	public Mono<Void> processNewItemsViaRSocketFireAndForget(Item item) {
 		return this.repository.save(item) //
-				.doOnNext(savedItem -> this.itemSink.next(savedItem)) //
+				.doOnNext(savedItem -> this.itemsSink.tryEmitNext(savedItem)) //
 				.then();
 	}
 	// end::fire-and-forget[]
@@ -67,7 +68,8 @@ public class RSocketService {
 	// tag::monitor[]
 	@MessageMapping("newItems.monitor") // <1>
 	public Flux<Item> monitorNewItems() { // <2>
-		return this.itemProcessor; // <3>
+//		return this.itemProcessor; // <3>
+		return this.itemsSink.asFlux(); // <3>
 	}
 	// end::monitor[]
 }
