@@ -50,5 +50,6 @@
 		<module>9-reactive-repository</module>
 		<module>9-reactive-custom-config</module>
 		<module>9-reactive-method-security</module>
+		<module>9-reactive-oauth</module>
 	</modules>
 </project>

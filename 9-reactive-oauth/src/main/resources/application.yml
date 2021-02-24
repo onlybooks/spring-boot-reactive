@@ -1,0 +1,16 @@
+# tag::oauth[]
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+#            client-id: 1234redacted5678opeh.apps.googleusercontent.com
+#            client-secret: ovj6b_va5fEB-EWEcE3FGOK6
+            client-id: 978393887332-v8id6kn7lkavgstr0sgmmdo11ojjrgnq.apps.googleusercontent.com
+            client-secret: h1E-Lm4Za3zXGILiyvqFsfIN
+  # end::oauth[]
+  webflux:
+    hiddenmethod:
+      filter:
+        enabled: true
