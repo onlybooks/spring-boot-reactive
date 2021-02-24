@@ -30,19 +30,19 @@ public class RSocketService {
 
 	private final ItemRepository repository;
 	// end::code[]
-//	private final EmitterProcessor<Item> itemProcessor;
+	private final EmitterProcessor<Item> itemProcessor;
 
-//	private final FluxSink<Item> itemSink;
-	private final Sinks.Many<Item> itemsSink;
+	private final FluxSink<Item> itemSink;
+//	private final Sinks.Many<Item> itemsSink;  //  Deprecated인 FluxProcessor, EmitterProcessor의 대체 구현
 
 	// tag::code2[]
 	public RSocketService(ItemRepository repository) {
 		this.repository = repository; // <2>
 		// end::code2[]
 		// tag::code3[]
-//		this.itemProcessor = EmitterProcessor.create(); // <1>
-//		this.itemSink = this.itemProcessor.sink(); // <2>
-		this.itemsSink = Sinks.many().multicast().onBackpressureBuffer();
+		this.itemProcessor = EmitterProcessor.create(); // <1>
+		this.itemSink = this.itemProcessor.sink(); // <2>
+//		this.itemsSink = Sinks.many().multicast().onBackpressureBuffer();  //  Deprecated인 FluxProcessor, EmitterProcessor의 대체 구현
 
 	}
 	// end::code3[]
@@ -51,8 +51,8 @@ public class RSocketService {
 	@MessageMapping("newItems.request-response") // <1>
 	public Mono<Item> processNewItemsViaRSocketRequestResponse(Item item) { // <2>
 		return this.repository.save(item) // <3>
-//				.doOnNext(savedItem -> this.itemSink.next(savedItem)); // <4>
-				.doOnNext(savedItem -> this.itemsSink.tryEmitNext(savedItem)); // <4>
+				.doOnNext(savedItem -> this.itemSink.next(savedItem)); // <4>
+//				.doOnNext(savedItem -> this.itemsSink.tryEmitNext(savedItem));  //  Deprecated인 FluxProcessor, EmitterProcessor의 대체 구현
 	}
 	// end::request-response[]
 
@@ -60,7 +60,8 @@ public class RSocketService {
 	@MessageMapping("newItems.fire-and-forget")
 	public Mono<Void> processNewItemsViaRSocketFireAndForget(Item item) {
 		return this.repository.save(item) //
-				.doOnNext(savedItem -> this.itemsSink.tryEmitNext(savedItem)) //
+				.doOnNext(savedItem -> this.itemSink.next(savedItem)) //
+//				.doOnNext(savedItem -> this.itemsSink.tryEmitNext(savedItem))  //  Deprecated인 FluxProcessor, EmitterProcessor의 대체 구현
 				.then();
 	}
 	// end::fire-and-forget[]
@@ -68,8 +69,8 @@ public class RSocketService {
 	// tag::monitor[]
 	@MessageMapping("newItems.monitor") // <1>
 	public Flux<Item> monitorNewItems() { // <2>
-//		return this.itemProcessor; // <3>
-		return this.itemsSink.asFlux(); // <3>
+		return this.itemProcessor; // <3>
+//		return this.itemsSink.asFlux();  //  Deprecated인 FluxProcessor, EmitterProcessor의 대체 구현
 	}
 	// end::monitor[]
 }
