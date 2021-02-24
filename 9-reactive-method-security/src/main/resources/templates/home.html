@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Hacking with Spring Boot - Getting Started</title>
+</head>
+<body>
+
+<!-- tag::user-context[] -->
+<table>
+    <tr>
+        <td>Name:</td>
+        <td th:text="${auth.name}"></td>
+    </tr>
+    <tr>
+        <td>Authorities:</td>
+        <td th:text="${auth.authorities}"></td>
+    </tr>
+</table>
+<form action="/logout" method="post">
+    <input type="submit" value="Logout">
+</form>
+<hr/>
+<!-- end::user-context[] -->
+
+<h1>Welcome to Hacking with Spring Boot!</h1>
+
+
+<!-- tag::1[] -->
+<h2>Inventory Management</h2>
+<table>
+    <th>Id</th>
+    <th>Name</th>
+    <th>Price</th>
+    <tr th:each="item : ${items}">
+        <td th:text="${item.id}"></td>
+        <td th:text="${item.name}"></td>
+        <td th:text="${item.price}"></td>
+        <td>
+            <form method="post" th:action="@{'/add/' + ${item.id}}">
+                <input type="submit" value="Add to Cart" />
+            </form>
+        </td>
+    </tr>
+</table>
+<!-- end::1[] -->
+
+<!-- tag::2[] -->
+<h2>My Cart</h2>
+<table>
+    <th>Id</th>
+    <th>Name</th>
+    <th>Quantity</th>
+    <tr th:each="cartItem : ${cart.cartItems}">
+        <td th:text="${cartItem.item.id}"></td>
+        <td th:text="${cartItem.item.name}"></td>
+        <td th:text="${cartItem.quantity}"></td>
+        <td>
+            <form th:method="delete" th:action="@{'/remove/' + ${cartItem.item.id}}">
+                <input type="submit" value="-1"/>
+            </form>
+        </td>
+    </tr>
+</table>
+<!-- end::2[] -->
+
+</body>
+</html>
