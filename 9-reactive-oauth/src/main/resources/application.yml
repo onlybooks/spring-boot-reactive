@@ -5,10 +5,8 @@ spring:
       client:
         registration:
           google:
-#            client-id: 1234redacted5678opeh.apps.googleusercontent.com
-#            client-secret: ovj6b_va5fEB-EWEcE3FGOK6
-            client-id: 978393887332-v8id6kn7lkavgstr0sgmmdo11ojjrgnq.apps.googleusercontent.com
-            client-secret: h1E-Lm4Za3zXGILiyvqFsfIN
+            client-id: GOOGLE_CLIENT_ID # 실제 구글에서 발급받은 client-id로 대체해야함
+            client-secret: GOOGLE_CLIENT_SECRET # 실제 구글에서 발급받은 client-secret으로 대체해야함
   # end::oauth[]
   webflux:
     hiddenmethod:
