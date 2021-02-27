@@ -33,7 +33,9 @@ public class RSocketService {
 	private final EmitterProcessor<Item> itemProcessor;
 
 	private final FluxSink<Item> itemSink;
-//	private final Sinks.Many<Item> itemsSink;  //  Deprecated인 FluxProcessor, EmitterProcessor의 대체 구현
+
+	//  Deprecated인 FluxProcessor, EmitterProcessor의 대체 구현
+//	private final Sinks.Many<Item> itemsSink;
 
 	// tag::code2[]
 	public RSocketService(ItemRepository repository) {
@@ -42,7 +44,8 @@ public class RSocketService {
 		// tag::code3[]
 		this.itemProcessor = EmitterProcessor.create(); // <1>
 		this.itemSink = this.itemProcessor.sink(); // <2>
-//		this.itemsSink = Sinks.many().multicast().onBackpressureBuffer();  //  Deprecated인 FluxProcessor, EmitterProcessor의 대체 구현
+		//  Deprecated인 FluxProcessor, EmitterProcessor의 대체 구현
+//		this.itemsSink = Sinks.many().multicast().onBackpressureBuffer();
 
 	}
 	// end::code3[]
@@ -52,7 +55,8 @@ public class RSocketService {
 	public Mono<Item> processNewItemsViaRSocketRequestResponse(Item item) { // <2>
 		return this.repository.save(item) // <3>
 				.doOnNext(savedItem -> this.itemSink.next(savedItem)); // <4>
-//				.doOnNext(savedItem -> this.itemsSink.tryEmitNext(savedItem));  //  Deprecated인 FluxProcessor, EmitterProcessor의 대체 구현
+				//  Deprecated인 FluxProcessor, EmitterProcessor의 대체 구현
+//				.doOnNext(savedItem -> this.itemsSink.tryEmitNext(savedItem));
 	}
 	// end::request-response[]
 
@@ -61,7 +65,8 @@ public class RSocketService {
 	public Mono<Void> processNewItemsViaRSocketFireAndForget(Item item) {
 		return this.repository.save(item) //
 				.doOnNext(savedItem -> this.itemSink.next(savedItem)) //
-//				.doOnNext(savedItem -> this.itemsSink.tryEmitNext(savedItem))  //  Deprecated인 FluxProcessor, EmitterProcessor의 대체 구현
+				//  Deprecated인 FluxProcessor, EmitterProcessor의 대체 구현
+//				.doOnNext(savedItem -> this.itemsSink.tryEmitNext(savedItem))
 				.then();
 	}
 	// end::fire-and-forget[]
@@ -70,7 +75,8 @@ public class RSocketService {
 	@MessageMapping("newItems.monitor") // <1>
 	public Flux<Item> monitorNewItems() { // <2>
 		return this.itemProcessor; // <3>
-//		return this.itemsSink.asFlux();  //  Deprecated인 FluxProcessor, EmitterProcessor의 대체 구현
+		//  Deprecated인 FluxProcessor, EmitterProcessor의 대체 구현
+//		return this.itemsSink.asFlux();
 	}
 	// end::monitor[]
 }
