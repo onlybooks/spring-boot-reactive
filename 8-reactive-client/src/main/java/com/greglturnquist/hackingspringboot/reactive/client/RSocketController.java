@@ -66,7 +66,7 @@ public class RSocketController {
 	// end::request-response[]
 
 	@GetMapping(value = "/items/request-stream", produces = MediaType.APPLICATION_NDJSON_VALUE) // <1>
-	Flux<Item> findItemUsingRSocketRequestStream() {
+	Flux<Item> findItemsUsingRSocketRequestStream() {
 		return this.requester //
 				.flatMapMany(rSocketRequester -> rSocketRequester // <2>
 						.route("newItems.request-stream") // <3>

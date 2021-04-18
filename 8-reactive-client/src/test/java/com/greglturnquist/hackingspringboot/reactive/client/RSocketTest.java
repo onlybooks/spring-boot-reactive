@@ -81,30 +81,28 @@ public class RSocketTest {
 	void verifyRemoteOperationsThroughRSocketRequestStream() //
 			throws InterruptedException {
 		// Clean out the database
-		this.repository.deleteAll()
-				.as(StepVerifier::create)
-				.verifyComplete();
+		this.repository.deleteAll().block(); // <1>
 
-		// Create 10 new "item"s
+		// Create 3 new "item"s
 		List<Item> items = IntStream.rangeClosed(1, 3)
-				.mapToObj(i -> new Item("Alf alarm clock - " + i, "nothing important - " + i, i))
+				.mapToObj(i -> new Item("name - " + i, "description - " + i, i)) // <2>
 				.collect(Collectors.toList());
 
-		this.repository.saveAll(items).blockLast();
+		this.repository.saveAll(items).blockLast(); // <3>
 
 
 		// Get stream
 		this.webTestClient.get().uri("/items/request-stream")
-				.accept(MediaType.APPLICATION_NDJSON)
+				.accept(MediaType.APPLICATION_NDJSON) // <4>
 				.exchange() //
 				.expectStatus().isOk()
-				.returnResult(Item.class)
-				.getResponseBody()
+				.returnResult(Item.class) // <5>
+				.getResponseBody() // <6>
 				.as(StepVerifier::create)
-				.expectNextMatches(itemPredicate("1"))
+				.expectNextMatches(itemPredicate("1")) // <7>
 				.expectNextMatches(itemPredicate("2"))
 				.expectNextMatches(itemPredicate("3"))
-				.verifyComplete();
+				.verifyComplete(); // <8>
 	}
 
 	private Predicate<Item> itemPredicate(String num) {
