@@ -18,11 +18,20 @@ package com.greglturnquist.hackingspringboot.reactive.client;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.reactive.server.FluxExchangeResult;
+import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
+
+import java.time.Duration;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * @author Greg Turnquist
@@ -67,6 +76,47 @@ public class RSocketTest {
 				.verifyComplete();
 	}
 	// end::fire-and-forget[]
+
+	@Test
+	void verifyRemoteOperationsThroughRSocketRequestStream() //
+			throws InterruptedException {
+		// Clean out the database
+		this.repository.deleteAll()
+				.as(StepVerifier::create)
+				.verifyComplete();
+
+		// Create 10 new "item"s
+		List<Item> items = IntStream.rangeClosed(1, 3)
+				.mapToObj(i -> new Item("Alf alarm clock - " + i, "nothing important - " + i, i))
+				.collect(Collectors.toList());
+
+		this.repository.saveAll(items).blockLast();
+
+
+		// Get stream
+		this.webTestClient.get().uri("/items/request-stream")
+				.accept(MediaType.APPLICATION_NDJSON)
+				.exchange() //
+				.expectStatus().isOk()
+				.returnResult(Item.class)
+				.getResponseBody()
+				.as(StepVerifier::create)
+				.expectNextMatches(itemPredicate("1"))
+				.expectNextMatches(itemPredicate("2"))
+				.expectNextMatches(itemPredicate("3"))
+				.verifyComplete();
+	}
+
+	private Predicate<Item> itemPredicate(String num) {
+		return item -> {
+			assertThat(item.getName()).startsWith("name");
+			assertThat(item.getName()).endsWith(num);
+			assertThat(item.getDescription()).startsWith("description");
+			assertThat(item.getDescription()).endsWith(num);
+			assertThat(item.getPrice()).isPositive();
+			return true;
+		};
+	}
 
 	// tag::request-response[]
 	@Test
