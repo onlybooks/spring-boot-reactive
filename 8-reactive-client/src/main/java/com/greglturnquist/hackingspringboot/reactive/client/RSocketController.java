@@ -21,7 +21,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.*;
 
 import java.net.URI;
+import java.time.Duration;
 
+import org.springframework.http.MediaType;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import org.springframework.http.ResponseEntity;
@@ -62,6 +64,15 @@ public class RSocketController {
 						URI.create("/items/request-response")).body(savedItem));
 	}
 	// end::request-response[]
+
+	@GetMapping(value = "/items/request-stream", produces = MediaType.APPLICATION_NDJSON_VALUE) // <1>
+	Flux<Item> findItemUsingRSocketRequestStream() {
+		return this.requester //
+				.flatMapMany(rSocketRequester -> rSocketRequester // <2>
+						.route("newItems.request-stream") // <3>
+						.retrieveFlux(Item.class) // <4>
+						.delayElements(Duration.ofSeconds(1))); // <5>
+	}
 
 	// tag::fire-and-forget[]
 	@PostMapping("/items/fire-and-forget")

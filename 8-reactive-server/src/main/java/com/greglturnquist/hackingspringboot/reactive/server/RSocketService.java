@@ -60,6 +60,14 @@ public class RSocketService {
 	}
 	// end::request-response[]
 
+	@MessageMapping("newItems.request-stream") // <1>
+	public Flux<Item> processNewItemsViaRSocketRequestStream() { // <2>
+		return this.repository.findAll() // <3>
+				.doOnNext(this.itemSink::next); // <4>
+		//  Deprecated인 FluxProcessor, EmitterProcessor의 대체 구현
+//				.doOnNext(this.itemsSink::tryEmitNext);
+	}
+
 	// tag::fire-and-forget[]
 	@MessageMapping("newItems.fire-and-forget")
 	public Mono<Void> processNewItemsViaRSocketFireAndForget(Item item) {
