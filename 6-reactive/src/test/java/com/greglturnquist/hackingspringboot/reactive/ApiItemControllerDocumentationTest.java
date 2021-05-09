@@ -87,4 +87,16 @@ public class ApiItemControllerDocumentationTest {
 	}
 	// end::test3[]
 
+	@Test
+	void updateItem() {
+		when(repository.save(any())).thenReturn( //
+				Mono.just(new Item("1", "Alf alarm clock", "updated", 19.99)));
+
+		this.webTestClient.put().uri("/api/items/1") // <1>
+				.bodyValue(new Item("Alf alarm clock", "updated", 19.99)) // <2>
+				.exchange() //
+				.expectStatus().isOk() // <3>
+				.expectBody() //
+				.consumeWith(document("update-item", preprocessResponse(prettyPrint()))); // <4>
+	}
 }
