@@ -1,4 +1,4 @@
-= Hacking with Spring Boot API Portal
+= 스프링 부트 실전 활용 마스터
 
 웹 서비스를 출시하면 개발자들에게 사용법을 알려줘야 합니다.
 
