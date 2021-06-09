@@ -40,6 +40,10 @@
             <groupId>de.flapdoodle.embed</groupId>
             <artifactId>de.flapdoodle.embed.mongo</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+        </dependency>
         <!-- end::mongodb[] -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

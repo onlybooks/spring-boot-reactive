@@ -16,22 +16,23 @@
 
 package com.greglturnquist.hackingspringboot.reactive;
 
+import org.springframework.data.repository.query.ReactiveQueryByExampleExecutor;
 import reactor.core.publisher.Flux;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 
 // tag::code[]
-public interface ItemRepository extends ReactiveCrudRepository<Item, String> {
+public interface ItemRepository extends ReactiveCrudRepository<Item, String>, ReactiveQueryByExampleExecutor<Item> {
 
 	Flux<Item> findByNameContaining(String partialName);
 	// end::code[]
 
 	// tag::code-2[]
-	@Query("{ 'name' : ?0, 'age' : ?1 }")
-	Flux<Item> findItemsForCustomerMonthlyReport(String name, int age);
-
-	@Query(sort = "{ 'age' : -1 }")
-	Flux<Item> findSortedStuffForWeeklyReport();
+//	@Query("{ 'name' : ?0, 'age' : ?1 }")
+//	Flux<Item> findItemsForCustomerMonthlyReport(String name, int age);
+//
+//	@Query(sort = "{ 'age' : -1 }")
+//	Flux<Item> findSortedStuffForWeeklyReport();
 	// end::code-2[]
 
 	// tag::code-3[]
