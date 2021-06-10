@@ -103,8 +103,11 @@ public class HomeController {
 			@RequestParam(required = false) String description, //
 			@RequestParam boolean useAnd) {
 		return Mono.just(Rendering.view("home.html") // <3>
-				.modelAttribute("results", //
+				.modelAttribute("items", //
 						inventoryService.searchByExample(name, description, useAnd)) // <4>
+				.modelAttribute("cart", //
+						this.cartRepository.findById("My Cart")
+								.defaultIfEmpty(new Cart("My Cart")))
 				.build());
 	}
 	// end::search[]
